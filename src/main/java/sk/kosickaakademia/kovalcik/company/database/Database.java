@@ -2,24 +2,29 @@ package sk.kosickaakademia.kovalcik.company.database;
 
 import sk.kosickaakademia.kovalcik.company.log.Log;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Properties;
 
 public class Database {
-    String url = "jdbc:mysql://itsovy.sk:3306/world_x";
-    String username="mysqluser";
-    String password="Kosice2021!";
-
-
     Log log = new Log();
+
     public Connection getConnection(){
         try {
-            Connection con= DriverManager.getConnection(url,username,password);
-            log.print("Connection successfull");
-            return con;
-        }catch (SQLException ex){
-            log.error(ex.toString());
+            Properties props = new Properties();
+            InputStream loader = getClass().getClassLoader().getResourceAsStream("db.properties");
+            props.load(loader);
+            String url = props.getProperty("url");
+            String username=props.getProperty("username");
+            String password= props.getProperty("password");
+            log.print("Connection success!");
+
+            Connection connection = DriverManager.getConnection(url,username,password);
+        }catch (Exception e){
+            e.printStackTrace();
         }
         return null;
     }
