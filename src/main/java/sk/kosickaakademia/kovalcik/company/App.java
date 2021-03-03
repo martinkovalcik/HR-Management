@@ -13,5 +13,6 @@ public class App
         System.out.println( "Hello World!" );
         Database db=new Database();
         db.getConnection();
+        db.insertNewUser(new User("Peter,Bondra,39,Gender.MALE"))
     }
 }

@@ -11,6 +11,7 @@ import java.util.Properties;
 
 public class Database {
     Log log = new Log();
+    private final String INSERTQUERY="INSERT INTO user (fname, lname, age, gender)" + " VALUES (?,?,?,?)";
 
     public Connection getConnection(){
         try {
