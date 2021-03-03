@@ -1,11 +1,13 @@
 package sk.kosickaakademia.kovalcik.company.database;
 
+import sk.kosickaakademia.kovalcik.company.entity.User;
 import sk.kosickaakademia.kovalcik.company.log.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Properties;
 
@@ -38,5 +40,22 @@ public class Database {
                 log.error(throwables.toString());
             }
         }
+    }
+
+    public boolean insertNewUser(User user){
+        Connection con = getConnection();
+        if (con!=null){
+            try {
+                PreparedStatement ps = con.prepareStatement(INSERTQUERY);
+                ps.setString(1,user.getFname());
+                ps.setString(1,user.getLname());
+                ps.setInt(1,user.getAge());
+                ps.setInt(1,user.getGender().getValue());
+            }catch (SQLException exception){
+                log.error(exception.toString());
+            }
+        }
+        return false;
+
     }
 }
