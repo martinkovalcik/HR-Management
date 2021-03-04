@@ -3,12 +3,9 @@ package sk.kosickaakademia.kovalcik.company.database;
 import sk.kosickaakademia.kovalcik.company.entity.User;
 import sk.kosickaakademia.kovalcik.company.log.Log;
 
-import java.io.IOException;
 import java.io.InputStream;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
@@ -80,5 +77,40 @@ public class Database {
             log.error(ex.toString());
         }
         return null;
+    }
+
+    public List<User> getUsersByAge(int from,int to){
+        if (to<from){
+            return null;
+        }
+        try {
+            String sql = "SELECT * FROM user WHERE age >= ? AND age <= ?";
+            PreparedStatement ps = getConnection().prepareStatement(sql);
+            ps.setInt(1,from);
+            ps.setInt(2, to);
+            return executeSelect(ps);
+        }
+        catch(Exception ex){
+            log.error(ex.toString());
+        }
+        return null;
+    }
+
+    private List<User> executeSelect(PreparedStatement ps) throws SQLException {
+        ResultSet rs =  ps.executeQuery();
+        List<User> list = new ArrayList<>();
+        int count = 0;
+        while(rs.next()){
+            count ++;
+            String fname = rs.getString("fname");
+            String lname = rs.getString("lname");
+            int age = rs.getInt("age");
+            int id = rs.getInt("id");
+            int gender = rs.getInt("gender");
+            User u=new User(id,fname,lname,age,gender);
+            list.add(u);
+        }
+        System.out.println("Number of records: "+ count);
+        return list;
     }
 }
