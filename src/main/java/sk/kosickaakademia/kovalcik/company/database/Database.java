@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Properties;
 
 public class Database {
@@ -57,5 +58,27 @@ public class Database {
         }
         return false;
 
+    }
+
+    public List<User> getMales(){
+        String sql = "SELECT * FROM user WHERE gender=0";
+        try {
+            PreparedStatement ps = getConnection().prepareStatement(sql);
+            return executeSelect(ps);
+        }catch (Exception ex){
+            log.error(ex.toString());
+        }
+        return null;
+    }
+
+    public List<User> getFemales(){
+        String sql = "SELECT * FROM user WHERE gender=1";
+        try {
+            PreparedStatement ps = getConnection().prepareStatement(sql);
+            return executeSelect(ps);
+        }catch (Exception ex){
+            log.error(ex.toString());
+        }
+        return null;
     }
 }
