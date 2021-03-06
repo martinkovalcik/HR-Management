@@ -113,4 +113,35 @@ public class Database {
         System.out.println("Number of records: "+ count);
         return list;
     }
+
+    public List<User> getAllUsers(){
+
+        String sql = "SELECT * FROM user";
+        try {
+            PreparedStatement ps = getConnection().prepareStatement(sql);
+            return executeSelect(ps);
+        }catch(Exception ex){
+            log.error(ex.toString());
+        }
+        return null;
+
+    }
+
+    public User getUserById(int id){
+
+        String sql = "SELECT * FROM user WHERE id = ?";
+        try {
+            PreparedStatement ps = getConnection().prepareStatement(sql);
+            ps.setInt(1,id);
+            List<User> list = executeSelect(ps);
+            if(list.isEmpty())
+                return null;
+            else
+                list.get(0);
+        }catch(Exception ex){
+            log.error(ex.toString());
+        }
+        return null;
+
+    }
 }
